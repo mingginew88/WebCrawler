@@ -37,26 +37,41 @@ public class StokeController {
 		System.out.println("현재시각 : "+ getCurrentData());
 		
 		// Input url for Crawling
-		String url = "https://finance.naver.com/sise/sise_market_sum.nhn";
+		String basicUrl = "https://finance.naver.com/sise/sise_market_sum.nhn";
 		
-		// Input tag for Crawling 
-		String tag = ".tltle";
+		// Input page Number
+		int pageNumber = 2;
 		
-		// url connect 
-		Document doc = Jsoup.connect(url).get();
+		// Input Data what you want
+		List<String> dataList = new ArrayList<String>();
 		
-		System.out.println("주제 : "+ doc.title());
+		for(int i = 1; i < pageNumber; i++) {
+			
+			String parameter = "?&page=" + pageNumber;
+			
+			String url = basicUrl + parameter;
+						 
+			// Input tag for Crawling 
+			String tag = ".tltle";
+			
+			// url connect 
+			Document doc = Jsoup.connect(url).get();
+			
+			System.out.println("주제 : "+ doc.title());
+			
+			// Elements - doc.select("selector")
+	        Elements elements = doc.select(tag);
+	        
+	        
+	        
+	        // Test for checking Elements
+	        for(Element element: elements) {
+	            System.out.println(element.text());
+	            dataList.add(element.text());
+	        }
+			
+		}
 		
-		// Elements - doc.select("selector")
-        Elements elements = doc.select(tag);
-        
-        List<String> dataList = new ArrayList<String>();
-        
-        // Test for checking Elements
-        for(Element element: elements) {
-            System.out.println(element.text());
-            dataList.add(element.text());
-        } 
         
         model.addAttribute("dataList", dataList);
         
